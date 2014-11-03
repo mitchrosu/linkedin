@@ -87,6 +87,12 @@ module LinkedIn
         path = "#{person_path(options)}/network/updates/key=#{update_key}/likes"
         simple_query(path, options)
       end
+      
+      def picture_urls(options={})
+        picture_size = options.delete(:picture_size) || 'original'
+        path = "#{picture_urls_path(options)}::(#{picture_size})"
+        simple_query(path, options)
+      end
 
       private
 
@@ -108,7 +114,7 @@ module LinkedIn
 
         headers = options.delete(:headers) || {}
         params  = to_query(options)
-        path   += "?#{params}" if !params.empty?
+        path   += "#{path.include?("?") ? "&" : "?"}#{params}" if !params.empty?
 
         Mash.from_json(get(path, headers))
       end
@@ -140,6 +146,11 @@ module LinkedIn
         else
           path += "/~"
         end
+      end
+
+      def picture_urls_path(options)
+        path = person_path(options)
+        path += "/picture-urls"
       end
 
       def jobs_path(options)
