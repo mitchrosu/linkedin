@@ -42,6 +42,15 @@ module LinkedIn
         delete(path)
       end
 
+      def get_company_follower_count(company_id, targets = {})
+        path = "/companies/#{company_id}/num-followers"
+
+        query = targets.map { |k, v| [k, v.join(',')].join('=') }
+        path = "#{path}?#{query.join('&')}" if query.any?
+
+        get(path).to_i
+      end
+
       def join_group(group_id)
         path = "/people/~/group-memberships/#{group_id}"
         body = {'membership-state' => {'code' => 'member' }}
