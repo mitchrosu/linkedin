@@ -116,7 +116,7 @@ module LinkedIn
         params  = to_query(options)
         path   += "#{path.include?("?") ? "&" : "?"}#{params}" if !params.empty?
 
-        Mash.from_json(get(path, headers))
+        get(path, headers)
       end
 
       def person_path(options)

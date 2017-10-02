@@ -1,8 +1,6 @@
 module LinkedIn
   module Api
-
     module UpdateMethods
-
       def add_share(share)
         path = "/people/~/shares"
         defaults = {:visibility => {:code => "anyone"}}
@@ -28,7 +26,7 @@ module LinkedIn
       def add_company_share(company_id, share)
         path = "/companies/#{company_id}/shares"
         defaults = {:visibility => {:code => "anyone"}}
-        hashify post(path, render(:company_share, defaults.merge(share)), 'x-li-format' => 'xml', "Content-Type" => "application/xml")
+        post(path, render(:company_share, defaults.merge(share)), 'x-li-format' => 'xml', "Content-Type" => "application/xml")
       end
 
       def follow_company(company_id)
@@ -48,7 +46,7 @@ module LinkedIn
         query = targets.map { |k, v| [k, v.join(',')].join('=') }
         path = "#{path}?#{query.join('&')}" if query.any?
 
-        get(path).to_i
+        get(path)
       end
 
       def join_group(group_id)
@@ -98,15 +96,6 @@ module LinkedIn
         path = "/groups/#{group_id}/posts"
         post(path, discussion.to_json, "Content-Type" => "application/json")
       end
-
-      private
-
-      def hashify response
-        response.body = Mash.from_response response
-        response
-      end
-
     end
-
   end
 end

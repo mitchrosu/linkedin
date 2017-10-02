@@ -14,13 +14,13 @@ module LinkedIn
     # a simple helper to convert an xml string to a Mash
     def self.from_xml(xml_string)
       result_hash = ::MultiXml.parse(xml_string)
-
-      # Drop off the root element
       new(result_hash[result_hash.keys.first])
     end
 
     def self.from_response(response)
-      if response['x-li-format'] == 'xml' or /\bxml\b/.match response['Content-Type']
+      if response.body =~ /^[0-9]+$/
+        response.body.to_i
+      elsif response.headers['x-li-format'] == 'xml' or /\bxml\b/.match response.headers['Content-Type']
         from_xml(response.body)
       else
         from_json(response.body)
