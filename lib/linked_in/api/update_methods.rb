@@ -8,12 +8,12 @@ module LinkedIn
       end
 
       # Creates a company share
-      # 
+      #
       # Returns an HttpResponse object with a body containing update_key and update_url
-      # 
+      #
       # @param company_id [String] The company id
       # @param share [Hash] Share data
-      # 
+      #
       # @option share [String] comment  Post must contain comment and/or (content/title and content/submitted-url). Max length is 700 characters.
       # @option share [Hash] content Content Hash
       # @option content [String] title Post must contain comment and/or (content/title and content/submitted-url). Max length is 200 characters.
@@ -21,12 +21,13 @@ module LinkedIn
       # @option content [String] submitted-image-url Invalid without (content/title and content/submitted-url).
       # @option content [String] description Max length of 256 characters.
       # @option share [Hash] targets Hash containing target_code => ['target_value', ...]
-      # 
+      #
       # @return [HttpResponse] Response
       def add_company_share(company_id, share)
         path = "/companies/#{company_id}/shares"
         defaults = {:visibility => {:code => "anyone"}}
-        post(path, render(:company_share, defaults.merge(share)), 'x-li-format' => 'xml', "Content-Type" => "application/xml")
+        #post(path, render(:company_share, defaults.merge(share)), 'x-li-format' => 'xml', "Content-Type" => "application/xml")
+        post(path, defaults.merge(share).to_json, "Content-Type" => "application/json")
       end
 
       def follow_company(company_id)
